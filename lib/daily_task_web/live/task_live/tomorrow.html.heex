@@ -1,0 +1,66 @@
+<div class="w-full bg-background text-foreground">
+  <div class="mx-auto max-w-2xl px-4 py-10">
+    <.header class="text-center">
+      <%= @page_title %>
+      <:subtitle>
+        <%= @tomorrow %>
+      </:subtitle>
+    </.header>
+
+    <div class="mt-8">
+      <div :if={@tomorrow_task} class="space-y-4">
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div class="flex items-center justify-between">
+            <p class={["text-lg", @tomorrow_task.completed && "line-through"]}>
+              <%= @tomorrow_task.description %>
+            </p>
+            <div :if={@tomorrow_task.id} class="flex items-center space-x-2">
+              <.button
+                :if={!@tomorrow_task.completed}
+                phx-click="complete"
+                phx-value-id={@tomorrow_task.id}
+              >
+                Fullfør
+              </.button>
+              <.link patch={~p"/tasks/tomorrow/#{@tomorrow_task.id}/edit"} aria-label={"edit-task-#{@tomorrow_task.id}"}>
+                <.button>Rediger</.button>
+              </.link>
+              <.link
+                phx-click={JS.push("delete", value: %{id: @tomorrow_task.id})}
+                data-confirm="Er du sikker?"
+                aria-label={"delete-task-#{@tomorrow_task.id}"}
+              >
+                <.button>Slett</.button>
+              </.link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div :if={is_nil(@tomorrow_task)} class="text-center">
+        <p class="text-muted-foreground">Ingen task for i morgen ennå.</p>
+        <.link patch={~p"/tasks/tomorrow/new"} class="mt-4 inline-block">
+          <.button>Legg til task for i morgen</.button>
+        </.link>
+      </div>
+    </div>
+
+    <!-- Navigasjon tilbake til dagens tasks -->
+    <div class="mt-8 text-center">
+      <.link navigate={~p"/tasks"} class="text-blue-600 hover:text-blue-800">
+        ← Tilbake til dagens tasks
+      </.link>
+    </div>
+  </div>
+</div>
+
+<.modal :if={@live_action in [:new, :edit]} id="task-modal" show on_cancel={JS.patch(~p"/tasks/tomorrow")}>
+  <.live_component
+    module={DailyTaskWeb.TaskLive.FormComponent}
+    id={@task.id || :new}
+    title={@page_title}
+    action={@live_action}
+    task={@task}
+    today={@tomorrow}
+    patch={~p"/tasks/tomorrow"}
+  />
+</.modal>

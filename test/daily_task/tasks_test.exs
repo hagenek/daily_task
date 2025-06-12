@@ -59,5 +59,16 @@ defmodule DailyTask.TasksTest do
       task = task_fixture()
       assert %Ecto.Changeset{} = Tasks.change_task(task)
     end
+
+    test "get_task_by_tomorrow/0 returns tomorrow's task when it exists" do
+      tomorrow = Date.add(Date.utc_today(), 1)
+      task = task_fixture(%{date: tomorrow, description: "Tomorrow's task"})
+      
+      assert Tasks.get_task_by_tomorrow() == task
+    end
+
+    test "get_task_by_tomorrow/0 returns nil when no task exists for tomorrow" do
+      assert Tasks.get_task_by_tomorrow() == nil
+    end
   end
 end
