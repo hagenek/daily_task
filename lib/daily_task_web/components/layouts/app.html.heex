@@ -9,29 +9,7 @@
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <%= if assigns[:current_user] do %>
-        <span class="text-zinc-600">Velkommen, <%= assigns[:current_user].username %>!</span>
-        <.link 
-          href={~p"/users/log_out"} 
-          method="delete" 
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-        >
-          Logg ut
-        </.link>
-      <% else %>
-        <.link 
-          href={~p"/users/log_in"} 
-          class="hover:text-zinc-700"
-        >
-          Logg inn
-        </.link>
-        <.link 
-          href={~p"/users/register"} 
-          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-        >
-          Registrer deg
-        </.link>
-      <% end %>
+      
     </div>
   </div>
 </header>
