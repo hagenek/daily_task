@@ -1,0 +1,28 @@
+<div class="mx-auto max-w-sm">
+  <.header class="text-center">
+    Logg inn
+    <:subtitle>
+      Har du ikke en konto?
+      <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
+        Registrer deg her
+      </.link>
+    </:subtitle>
+  </.header>
+
+  <.simple_form for={%{}} as={:user} action={~p"/users/log_in"}>
+    <.input name="user[username]" type="text" label="Brukernavn" value={Phoenix.Flash.get(@flash, :username)} required />
+    <.input name="user[password]" type="password" label="Passord" required />
+
+    <:actions>
+      <.input name="user[remember_me]" type="checkbox" label="Husk meg" />
+      <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
+        Glemt passordet?
+      </.link>
+    </:actions>
+    <:actions>
+      <.button phx-disable-with="Logger inn..." class="w-full">
+        Logg inn <span aria-hidden="true">→</span>
+      </.button>
+    </:actions>
+  </.simple_form>
+</div>

@@ -1,0 +1,26 @@
+<div class="mx-auto max-w-sm">
+  <.header class="text-center">
+    Registrer ny bruker
+    <:subtitle>
+      Har du allerede en konto?
+      <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+        Logg inn her
+      </.link>
+    </:subtitle>
+  </.header>
+
+  <.simple_form for={@changeset} as={:user} action={~p"/users/register"}>
+    <.error :if={@changeset.action}>
+      Ops, noe gikk galt! Sjekk feilene nedenfor.
+    </.error>
+
+    <.input field={@changeset[:username]} type="text" label="Brukernavn" required />
+    <.input field={@changeset[:password]} type="password" label="Passord" required />
+
+    <:actions>
+      <.button phx-disable-with="Oppretter konto..." class="w-full">
+        Opprett konto <span aria-hidden="true">→</span>
+      </.button>
+    </:actions>
+  </.simple_form>
+</div>
