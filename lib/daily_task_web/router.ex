@@ -21,6 +21,11 @@ defmodule DailyTaskWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/tasks", TaskLive.Index, :index
+    live "/tasks/new", TaskLive.Index, :new
+    live "/tasks/:id/edit", TaskLive.Index, :edit
+    live "/tasks/:id/split", TaskLive.Index, :split
   end
 
   # Other scopes may use custom stacks.
@@ -28,28 +33,34 @@ defmodule DailyTaskWeb.Router do
   #   pipe_through :api
   # end
 
-  ## Authentication routes
-
-  scope "/", DailyTaskWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
-
-    get "/users/register", UserRegistrationController, :new
-    post "/users/register", UserRegistrationController, :create
-    get "/users/log_in", UserSessionController, :new
-    post "/users/log_in", UserSessionController, :create
-  end
-
-  scope "/", DailyTaskWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    # Protected routes go here
-  end
-
-  scope "/", DailyTaskWeb do
-    pipe_through [:browser]
-
-    delete "/users/log_out", UserSessionController, :delete
-  end
+  # ## Authentication routes
+  #
+  # scope "/users", DailyTaskWeb do
+  #   pipe_through [:browser, :redirect_if_user_is_authenticated]
+  #
+  #   get "/register", UserRegistrationController, :new
+  #   post "/register", UserRegistrationController, :create
+  #   get "/log_in", UserSessionController, :new
+  #   post "/log_in", UserSessionController, :create
+  #   get "/reset_password", UserResetPasswordController, :new
+  #   post "/reset_password", UserResetPasswordController, :create
+  # end
+  #
+  # scope "/users", DailyTaskWeb do
+  #   pipe_through [:browser, :require_authenticated_user]
+  #
+  #   get "/settings", UserSettingsController, :edit
+  #   put "/settings", UserSettingsController, :update
+  #   get "/settings/confirm_email/:token", UserSettingsController, :confirm_email
+  # end
+  #
+  # scope "/users", DailyTaskWeb do
+  #   pipe_through [:browser]
+  #
+  #   delete "/log_out", UserSessionController, :delete
+  #   get "/confirm/:token", UserConfirmationController, :edit
+  #   post "/confirm/:token", UserConfirmationController, :update
+  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:daily_task, :dev_routes) do

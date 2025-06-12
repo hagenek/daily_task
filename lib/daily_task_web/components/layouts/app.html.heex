@@ -9,8 +9,8 @@
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <%= if @current_user do %>
-        <span class="text-zinc-600">Velkommen, <%= @current_user.username %>!</span>
+      <%= if assigns[:current_user] do %>
+        <span class="text-zinc-600">Velkommen, <%= assigns[:current_user].username %>!</span>
         <.link 
           href={~p"/users/log_out"} 
           method="delete" 

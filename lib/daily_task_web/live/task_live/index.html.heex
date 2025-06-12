@@ -1,0 +1,86 @@
+<div class="w-full bg-background text-foreground">
+  <div class="mx-auto max-w-2xl px-4 py-10">
+    <.header class="text-center">
+      <%= @page_title %>
+      <:subtitle>
+        <%= @today %>
+      </:subtitle>
+    </.header>
+
+    <div class="mt-8">
+      <div :if={@task} class="space-y-4">
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div class="flex items-center justify-between">
+            <p class={["text-lg", @task.completed && "line-through"]}>
+              <%= @task.description %>
+            </p>
+            <div :if={@task.id} class="flex items-center space-x-2">
+              <.button
+                :if={!@task.completed}
+                phx-click="complete"
+                phx-value-id={@task.id}
+              >
+                Complete
+              </.button>
+              <.link patch={~p"/tasks/#{@task.id}/edit"} aria-label={"edit-task-#{@task.id}"}>
+                <.button>Edit</.button>
+              </.link>
+              <.link patch={~p"/tasks/#{@task.id}/split"} aria-label={"split-task-#{@task.id}"}>
+                <.button>Split</.button>
+              </.link>
+              <.link
+                phx-click={JS.push("delete", value: %{id: @task.id})}
+                data-confirm="Are you sure?"
+                aria-label={"delete-task-#{@task.id}"}
+              >
+                <.button>Delete</.button>
+              </.link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div :if={is_nil(@task)} class="text-center">
+        <p class="text-muted-foreground">No task for today. Add one!</p>
+        <.link patch={~p"/tasks/new"} class="mt-4 inline-block">
+          <.button>Add Task</.button>
+        </.link>
+      </div>
+    </div>
+
+    <div :if={@live_action == :split} class="relative z-50">
+      <.modal id="split-modal" show on_cancel={JS.patch(~p"/")}>
+        <.simple_form
+          for={@split_changeset}
+          id="split-task-form"
+          phx-submit="save_split"
+        >
+          <.input
+            field={to_form(@split_changeset)[:description_today]}
+            type="textarea"
+            label="Today's task description"
+          />
+          <.input
+            field={to_form(@split_changeset)[:description_tomorrow]}
+            type="textarea"
+            label="Tomorrow's task description"
+          />
+          <:actions>
+            <.button>Split Task</.button>
+          </:actions>
+        </.simple_form>
+      </.modal>
+    </div>
+  </div>
+</div>
+
+<.modal :if={@live_action in [:new, :edit]} id="task-modal" show on_cancel={JS.patch(~p"/tasks")}>
+  <.live_component
+    module={DailyTaskWeb.TaskLive.FormComponent}
+    id={@task.id || :new}
+    title={@page_title}
+    action={@live_action}
+    task={@task}
+    today={@today}
+    patch={~p"/tasks"}
+  />
+</.modal>
