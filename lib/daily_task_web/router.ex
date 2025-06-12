@@ -1,6 +1,8 @@
 defmodule DailyTaskWeb.Router do
   use DailyTaskWeb, :router
 
+  import DailyTaskWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule DailyTaskWeb.Router do
     plug :put_root_layout, html: {DailyTaskWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -24,6 +27,29 @@ defmodule DailyTaskWeb.Router do
   # scope "/api", DailyTaskWeb do
   #   pipe_through :api
   # end
+
+  ## Authentication routes
+
+  scope "/", DailyTaskWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/users/register", UserRegistrationController, :new
+    post "/users/register", UserRegistrationController, :create
+    get "/users/log_in", UserSessionController, :new
+    post "/users/log_in", UserSessionController, :create
+  end
+
+  scope "/", DailyTaskWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    # Protected routes go here
+  end
+
+  scope "/", DailyTaskWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:daily_task, :dev_routes) do

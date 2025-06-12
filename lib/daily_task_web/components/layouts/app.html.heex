@@ -5,22 +5,33 @@
         <img src={~p"/images/logo.svg"} width="36" />
       </a>
       <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-        v{Application.spec(:phoenix, :vsn)}
+        DailyTask
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
-        @elixirphoenix
-      </a>
-      <a href="https://github.com/phoenixframework/phoenix" class="hover:text-zinc-700">
-        GitHub
-      </a>
-      <a
-        href="https://hexdocs.pm/phoenix/overview.html"
-        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-      >
-        Get Started <span aria-hidden="true">&rarr;</span>
-      </a>
+      <%= if @current_user do %>
+        <span class="text-zinc-600">Velkommen, <%= @current_user.username %>!</span>
+        <.link 
+          href={~p"/users/log_out"} 
+          method="delete" 
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Logg ut
+        </.link>
+      <% else %>
+        <.link 
+          href={~p"/users/log_in"} 
+          class="hover:text-zinc-700"
+        >
+          Logg inn
+        </.link>
+        <.link 
+          href={~p"/users/register"} 
+          class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
+        >
+          Registrer deg
+        </.link>
+      <% end %>
     </div>
   </div>
 </header>
