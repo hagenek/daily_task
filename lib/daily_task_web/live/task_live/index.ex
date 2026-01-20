@@ -73,14 +73,14 @@ defmodule DailyTaskWeb.TaskLive.Index do
       {:ok, %{today: task, tomorrow: _}} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Task split successfully")
+         |> put_flash(:info, "Task splittet! Se morgendagens tasks for å se den andre delen.")
          |> assign(task: task)
          |> push_patch(to: ~p"/tasks")}
 
       {:error, _} ->
         {:noreply,
          socket
-         |> put_flash(:error, "There was an error splitting the task.")
+         |> put_flash(:error, "Det oppstod en feil under splitting av tasken.")
          |> push_patch(to: ~p"/tasks")}
     end
   end

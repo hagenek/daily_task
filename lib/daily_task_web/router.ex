@@ -26,6 +26,10 @@ defmodule DailyTaskWeb.Router do
     live "/tasks/new", TaskLive.Index, :new
     live "/tasks/:id/edit", TaskLive.Index, :edit
     live "/tasks/:id/split", TaskLive.Index, :split
+
+    live "/tasks/tomorrow", TaskLive.Tomorrow, :index
+    live "/tasks/tomorrow/new", TaskLive.Tomorrow, :new
+    live "/tasks/tomorrow/:id/edit", TaskLive.Tomorrow, :edit
   end
 
   # Other scopes may use custom stacks.

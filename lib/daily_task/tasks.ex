@@ -123,6 +123,25 @@ defmodule DailyTask.Tasks do
   end
 
   @doc """
+  Gets tomorrow's task.
+
+  Returns `nil` if no task exists for tomorrow.
+
+  ## Examples
+
+      iex> get_task_by_tomorrow()
+      %Task{}
+
+      iex> get_task_by_tomorrow()
+      nil
+
+  """
+  def get_task_by_tomorrow do
+    tomorrow = Date.add(Date.utc_today(), 1)
+    get_task_by_date(tomorrow)
+  end
+
+  @doc """
   Splits a task into two.
 
   The original task is updated with new attributes, and a new task is

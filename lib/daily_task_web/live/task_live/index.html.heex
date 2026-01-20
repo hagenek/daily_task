@@ -47,6 +47,13 @@
       </div>
     </div>
 
+    <!-- Navigasjon til morgendagens tasks -->
+    <div class="mt-8 text-center">
+      <.link navigate={~p"/tasks/tomorrow"} class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        Se morgendagens tasks →
+      </.link>
+    </div>
+
     <div :if={@live_action == :split} class="relative z-50">
       <.modal id="split-modal" show on_cancel={JS.patch(~p"/")}>
         <.simple_form
